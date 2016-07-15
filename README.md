@@ -1,4 +1,4 @@
-# Mocha Practice
+# Web Development Template
 
 
 ## 開発するには……
@@ -7,7 +7,7 @@
 
 以下のようにコマンド
 ```
-git clone git@github.com:nekonenene/mocha_practice1.git
+git clone git@github.com:nekonenene/web-dev-template.git
 ```
 
 ### 2. Node.js をインストール
