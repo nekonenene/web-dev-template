@@ -55,7 +55,7 @@ gulp.task('server', function() {
 			port             : 8013,
 			livereload       : true,
 			directoryListing : false,
-			open             : false
+			open             : true,
 		}));
 });
 
@@ -67,8 +67,8 @@ gulp.task('copy', function() {
 	gulp.src(['./source/**/*', '!./source/**/*.'+ignoreSuffixes, '!./source/'+ignoreFolders])
 		.pipe(gulp.dest('./optimized/'));
 
-		// .DS_Store は削除
-		del(['./**/.DS_Store']);
+	// .DS_Store は削除
+	del(['./**/.DS_Store']);
 });
 
 /* **********
@@ -86,7 +86,7 @@ gulp.task('babel', function(callback) {
 			presets: ['es2015']
 		}),
 		sourcemaps.write(),
-		gulp.dest('./source/')
+		gulp.dest('./source/'),
 	], callback);
 });
 
@@ -97,8 +97,10 @@ gulp.task('sass', function() {
 	];
 
 	gulp.src(['./source/sass/**/*.{sass,scss}'])
+		.pipe(sourcemaps.init())
 		.pipe(sass().on('error', sass.logError))
 		.pipe(postCss(postCssTasks))
+		.pipe(sourcemaps.write())
 		.pipe(gulp.dest('./source/'));
 });
 
@@ -152,17 +154,17 @@ gulp.task('htmlMinify', function() {
 			removeRedundantAttributes    : true,
 			preventAttributesEscaping    : true,
 			useShortDoctype              : true,
-			removeEmptyAttributes        : true
+			removeEmptyAttributes        : true,
 		}))
 		.pipe(gulp.dest('./optimized/'));
 });
 
-/* ImageMin : 画像圧縮*/
+/* ImageMin : 画像圧縮 */
 gulp.task('imageMinify', function() {
 	gulp.src('./source/**/*.{gif,jpg,png,svg}')
 		.pipe(imageMin({
 			progressive : true,
-			interlaced  : true
+			interlaced  : true,
 		}))
 		.pipe(gulp.dest('./optimized/'));
 });
