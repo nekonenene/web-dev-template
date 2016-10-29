@@ -1,5 +1,8 @@
 var gulp = require('gulp');
-var del  = require('del');
+var pump = require('pump');
+var sourcemaps = require('gulp-sourcemaps');
+var replace = require('gulp-replace');
+var del = require('del');
 
 // JS plugins
 var babel  = require('gulp-babel');
@@ -7,11 +10,11 @@ var uglify = require('gulp-uglify');
 
 // CSS plugins
 var sass    = require('gulp-sass');
-var cssNext = require('gulp-cssnext');
+var postCss = require('gulp-postcss');
+var cssNext = require('postcss-cssnext');
 var csso    = require('gulp-csso');
 
 // HTML plugins
-var haml = require('gulp-ruby-haml');
 var pug  = require('gulp-pug');
 var htmlMin = require('gulp-htmlmin');
 
@@ -21,9 +24,16 @@ var imageMin = require('gulp-imagemin');
 // Live Reload
 var webServer = require('gulp-webserver');
 
+var defaultTasks = [
+	'copy',
+	'compile',
+	'minify',
+	'server',
+	'watch',
+];
 
 /* gulp とコマンドを打つと実行される */
-gulp.task('default', ['copy', 'compile', 'minify', 'server', 'watch'] );
+gulp.task('default', defaultTasks);
 
 /* watch 系まとめ : gulp watch */
 gulp.task('watch', function() {
@@ -40,21 +50,21 @@ gulp.task('watch', function() {
 
 /* Live Reload!! */
 gulp.task('server', function() {
-	gulp.src('./optimized/')
+	gulp.src('./source/')
 		.pipe(webServer({
 			port             : 8013,
 			livereload       : true,
 			directoryListing : false,
-			open             : true
+			open             : false
 		}));
 });
 
 /* COPY : HTML, CSS, JS などでないファイルを optimized にコピー */
 gulp.task('copy', function() {
-	var ignoreFiles   = '{html,css,js,haml,jade,pug,es6,sass,scss,gif,jpg,png,svg}';
-	var ignoreFolders = '{es6,sass,pug,plugins,jade_php}';
+	var ignoreSuffixes = '{html,css,js,pug,es6,scss,gif,jpg,png,svg}';
+	var ignoreFolders  = '{pug,es6,plugins,sass}';
 
-	gulp.src(['./source/**/*', '!./source/**/*.'+ignoreFiles, '!./source/'+ignoreFolders])
+	gulp.src(['./source/**/*', '!./source/**/*.'+ignoreSuffixes, '!./source/'+ignoreFolders])
 		.pipe(gulp.dest('./optimized/'));
 
 		// .DS_Store は削除
@@ -67,20 +77,28 @@ gulp.task('copy', function() {
 gulp.task('compile', ['babel', 'sass', 'pug']);
 
 /* JS Babel : ES6への対応 */
-gulp.task('babel', function() {
-	gulp.src('./source/es6/**/*.es6')
-		.pipe(babel({
+gulp.task('babel', function(callback) {
+	pump([
+		gulp.src('./source/es6/**/*.es6'),
+		sourcemaps.init(),
+		replace(/\t/g, '  '), // babel でネストが深くなるのでタブ文字を2文字スペースに
+		babel({
 			presets: ['es2015']
-		}))
-		.on('error', console.error.bind(console))
-		.pipe(gulp.dest('./source/'));
+		}),
+		sourcemaps.write(),
+		gulp.dest('./source/')
+	], callback);
 });
 
-/* Sass + Scss , and CSS Next */
+/* Sass + Scss , and PostCSS */
 gulp.task('sass', function() {
+	var postCssTasks = [
+		cssNext({ browsers: ['last 2 version'] }),
+	];
+
 	gulp.src(['./source/sass/**/*.{sass,scss}'])
 		.pipe(sass().on('error', sass.logError))
-		.pipe(cssNext())
+		.pipe(postCss(postCssTasks))
 		.pipe(gulp.dest('./source/'));
 });
 
@@ -89,16 +107,6 @@ gulp.task('pug', function() {
 	gulp.src('./source/pug/**/*.pug')
 		.pipe(pug({
 			pretty : '\t'
-		}).on('error', function(e) { console.log(e.message); }))
-		.pipe(gulp.dest('./source/'));
-});
-
-/* Haml : HTML へコンパイル */
-gulp.task('haml', function() {
-	gulp.src('./source/haml/**/*.haml')
-		.pipe(haml({
-			doubleQuote: true,
-			encodings  : 'UTF-8'
 		}).on('error', function(e) { console.log(e.message); }))
 		.pipe(gulp.dest('./source/'));
 });
