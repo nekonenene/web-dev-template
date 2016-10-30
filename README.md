@@ -1,57 +1,43 @@
-# Web Development Template
-
+# titletitle
 
 ## 開発するには……
 
-### 1. このレポジトリをコピー
+### 1. このリポジトリをコピー
 
 以下のようにコマンド
 ```
-git clone git@github.com:nekonenene/web-dev-template.git
+git clone git@github.com:nekonenene/titletitle.git
 ```
 
-### 2. Node.js をインストール
+### 2. Ruby, Node.js をインストール
 
-Windows なら、chocolatey で `choco install nodejs -y`  
-Mac なら、homebrew で `brew install nodejs`
+Windows なら、chocolatey で `choco install -y ruby nodejs`
 
-上記のことがわからないなら、[Node.js のホームページ](https://nodejs.org/)から安定版をダウンロードしてインストール
+Mac なら、homebrew で `brew install ruby nodejs`
 
+上記のことがわからないなら、  
+- [Ruby](https://www.ruby-lang.org/) 
+- [Node.js](https://nodejs.org/)
 
-### 3. Bundler をインストール
+のホームページから安定版をダウンロードしてインストール
 
-Win : `choco install ruby -y`  
-Mac : `brew install ruby`  
-
-[Ruby](https://www.ruby-lang.org/) をインストールしたのち、
-```ruby
-gem install bundler
-```
-
-
-### 4. 開発に必要な依存パッケージ群をインストール
+### 3. 開発に必要な依存パッケージ群をインストール
 
 プロジェクトがあるディレクトリで以下のようにコマンド
 ```
-npm install
+make init
 ```
 
-それから、
-```
-bundle install
-```
-ただし `bundle install` は、オプションなしだとシステム（グローバル環境）にインストールされるので、  
-それが嫌な場合は `bundle install --path vendor/bundle` とコマンド
+これで `npm install` やら `bundle install` がおこなわれる
 
-
-### 5. 開発監視ツールを起動
+### 4. 開発監視ツールを起動
 
 （もし gulp を入れていないなら）
 ```
-npm install -g gulp
+npm run gulp
 ```
 
-gulp をインストール後は、プロジェクトがあるディレクトリで以下のようにコマンド
+gulp をグローバルにインストール済みなら、プロジェクトがあるディレクトリで以下のようにコマンド
 ```
 gulp
 ```
