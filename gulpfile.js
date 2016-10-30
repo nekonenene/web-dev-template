@@ -98,7 +98,11 @@ gulp.task('sass', function() {
 
 	gulp.src(['./source/sass/**/*.{sass,scss}'])
 		.pipe(sourcemaps.init())
-		.pipe(sass().on('error', sass.logError))
+		.pipe(sass({
+			indentType: 'tab',
+			indentWidth: 1,
+			outputStyle: 'expanded'
+		}).on('error', sass.logError))
 		.pipe(postCss(postCssTasks))
 		.pipe(sourcemaps.write())
 		.pipe(gulp.dest('./source/'));
