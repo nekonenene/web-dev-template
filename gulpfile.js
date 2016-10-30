@@ -12,7 +12,7 @@ var uglify = require('gulp-uglify');
 var sass    = require('gulp-sass');
 var postCss = require('gulp-postcss');
 var cssNext = require('postcss-cssnext');
-var csso    = require('gulp-csso');
+var csso    = require('postcss-csso');
 
 // HTML plugins
 var pug  = require('gulp-pug');
@@ -134,8 +134,12 @@ gulp.task('jsMinify', function() {
 
 /* CSS Min */
 gulp.task('cssMinify', function() {
+	var postCssTasks = [
+		csso(),
+	];
+
 	gulp.src('./source/**/*.css')
-		.pipe(csso())
+		.pipe(postCss(postCssTasks))
 		.pipe(gulp.dest('./optimized/'));
 });
 

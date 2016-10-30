@@ -26,7 +26,6 @@
     "del": "^2.2.2",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
-    "gulp-csso": "^2.0.0",
     "gulp-htmlmin": "^3.0.0",
     "gulp-imagemin": "^3.1.0",
     "gulp-postcss": "^6.2.0",
@@ -37,6 +36,7 @@
     "gulp-uglify": "^2.0.0",
     "gulp-webserver": "^0.9.1",
     "postcss-cssnext": "^2.8.0",
+    "postcss-csso": "^1.1.2",
     "pump": "^1.0.1"
   }
 }
