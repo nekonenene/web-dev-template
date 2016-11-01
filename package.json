@@ -35,7 +35,7 @@
     "gulp-sass": "^2.3.2",
     "gulp-sourcemaps": "^2.2.0",
     "gulp-uglify": "^2.0.0",
-    "gulp-webserver": "^0.9.1",
+    "gulp-connect": "^5.0.0",
     "postcss-cssnext": "^2.8.0",
     "postcss-csso": "^1.1.2",
     "pump": "^1.0.1"

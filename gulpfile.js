@@ -22,12 +22,16 @@ var htmlMin = require('gulp-htmlmin');
 var imageMin = require('gulp-imagemin');
 
 // Live Reload
-var webServer = require('gulp-webserver');
+var connect = require('gulp-connect');
 
-var defaultTasks = [
+var buildTasks = [
   'copy',
   'compile',
   'minify',
+];
+
+var defaultTasks = [
+  'build',
   'server',
   'watch',
 ];
@@ -35,13 +39,16 @@ var defaultTasks = [
 /* gulp とコマンドを打つと実行される */
 gulp.task('default', defaultTasks);
 
+/* gulp build */
+gulp.task('build', buildTasks);
+
 /* watch 系まとめ : gulp watch */
 gulp.task('watch', function() {
-  gulp.watch(['./source/**/*'], ['copy']);
+  // gulp.watch(['./source/**/*'], ['copy']);
   gulp.watch(['./source/**/*.pug'],  ['pug']);
   gulp.watch(['./source/**/*.es6'],  ['babel']);
   gulp.watch(['./source/**/*.scss'], ['sass']);
-  gulp.watch(['./source/**/*.{gif,jpg,png,svg}'], ['imageMinify']);
+  // gulp.watch(['./source/**/*.{gif,jpg,png,svg}'], ['imageMinify']);
   gulp.watch(['./source/**/*.js']   , ['jsMinify']);
   gulp.watch(['./source/**/*.css']  , ['cssMinify']);
   gulp.watch(['./source/**/*.html'] , ['htmlMinify']);
@@ -50,13 +57,12 @@ gulp.task('watch', function() {
 
 /* Live Reload!! */
 gulp.task('server', function() {
-  gulp.src('./source/')
-    .pipe(webServer({
-      port             : 8013,
-      livereload       : true,
-      directoryListing : false,
-      open             : true,
-    }));
+  connect.server({
+    root       : './source/',
+    name       : 'Server(Product)',
+    port       : 8013,
+    livereload : true,
+  });
 });
 
 /* COPY : HTML, CSS, JS などでないファイルを optimized にコピー */
@@ -133,7 +139,8 @@ gulp.task('codeMinify', ['jsMinify', 'cssMinify', 'htmlMinify']);
 gulp.task('jsMinify', function() {
   gulp.src('./source/**/*.js')
     .pipe(uglify())
-    .pipe(gulp.dest('./optimized/'));
+    .pipe(gulp.dest('./optimized/'))
+    .pipe(connect.reload());
 });
 
 /* CSS Min */
@@ -144,7 +151,8 @@ gulp.task('cssMinify', function() {
 
   gulp.src('./source/**/*.css')
     .pipe(postCss(postCssTasks))
-    .pipe(gulp.dest('./optimized/'));
+    .pipe(gulp.dest('./optimized/'))
+    .pipe(connect.reload());
 });
 
 /* HTML Min */
@@ -164,7 +172,8 @@ gulp.task('htmlMinify', function() {
       useShortDoctype              : true,
       removeEmptyAttributes        : true,
     }))
-    .pipe(gulp.dest('./optimized/'));
+    .pipe(gulp.dest('./optimized/'))
+    .pipe(connect.reload());
 });
 
 /* ImageMin : 画像圧縮 */
