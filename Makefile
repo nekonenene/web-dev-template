@@ -1,7 +1,7 @@
 .PHONY: init
 init:
 	# ruby, nodejs はインストール済みとする
-	yarn cache clean
+	rm -rf node_modules
 	yarn install
 	gem update
 	gem install bundler
