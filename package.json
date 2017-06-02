@@ -19,7 +19,7 @@
   "homepage": "http://hato-neko.x0.com/",
   "dependencies": {
     "font-awesome": "^4.7.0",
-    "zepto": "^1.2.0"
+    "jquery": "^3.2.1"
   },
   "devDependencies": {
     "babel-preset-es2015": "^6.24.1",

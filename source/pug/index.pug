@@ -27,10 +27,12 @@ html(lang="ja")
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    // Zepto : CDN 上になければローカルから読み込み
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js")
+    // jQuery : CDN 上になければローカルから読み込み
+    script(src="https://code.jquery.com/jquery-3.2.1.min.js",
+      integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=",
+      crossorigin="anonymous")
     script.
-      window.zepto || document.write('<script src="./js/plugins/zepto.js"><\/script>')
+      window.jquery || document.write('<script src="./js/plugins/jquery.min.js"><\/script>')
 
   body
     //- Facebook API は body タグのあとに書く
