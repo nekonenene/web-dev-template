@@ -32,7 +32,8 @@ var buildTasks = [
 
 var defaultTasks = [
   'build',
-  'server',
+  'sourceServer',
+  'distServer',
   'watch',
 ];
 
@@ -56,11 +57,20 @@ gulp.task('watch', function() {
 
 
 /* Live Reload!! */
-gulp.task('server', function() {
+gulp.task('sourceServer', function() {
   connect.server({
     root       : './source/',
-    name       : 'Server(Product)',
+    name       : 'Server(Source)',
     port       : 8013,
+    livereload : true,
+  });
+});
+
+gulp.task('distServer', function() {
+  connect.server({
+    root       : './optimized/',
+    name       : 'Server(Dist)',
+    port       : 8014,
     livereload : true,
   });
 });
