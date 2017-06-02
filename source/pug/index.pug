@@ -36,14 +36,18 @@ html(lang="ja")
       #site-main
         h3 #{title}
         #content
-          p
-            button.blue-button(type="button") あお
-            button.green-button(type="button") みどり
-            button.yellow-button(type="button") きいろ
-            button.red-button(type="button") あか
+          .row
+            .col-12
+              p
+                button.btn.btn-primary(type="button") あお
+                button.btn.btn-success(type="button") みどり
+                button.btn.btn-warning(type="button") きいろ
+                button.btn.btn-danger(type="button") あか
 
-          p
-            .output
+          .row
+            .col-12
+              p
+                .output
 
       #footer
         a(href="http://hato-neko.x0.com", target="_blank", title="ハトネコエセンター").
