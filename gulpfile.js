@@ -146,52 +146,62 @@ gulp.task('minify', ['jsMinify', 'cssMinify', 'htmlMinify', 'imageMinify']);
 gulp.task('codeMinify', ['jsMinify', 'cssMinify', 'htmlMinify']);
 
 /* JavaScript Min */
-gulp.task('jsMinify', function() {
-  gulp.src('./source/**/*.js')
-    .pipe(uglify())
-    .pipe(gulp.dest('./optimized/'))
-    .pipe(connect.reload());
+gulp.task('jsMinify', function(callback) {
+  pump([
+    gulp.src('./source/**/*.js'),
+    uglify(),
+    gulp.dest('./optimized/'),
+    connect.reload(),
+  ], callback);
 });
 
 /* CSS Min */
-gulp.task('cssMinify', function() {
+gulp.task('cssMinify', function(callback) {
   var postCssTasks = [
     csso(),
   ];
 
-  gulp.src('./source/**/*.css')
-    .pipe(postCss(postCssTasks))
-    .pipe(gulp.dest('./optimized/'))
-    .pipe(connect.reload());
+  pump([
+    gulp.src('./source/**/*.css'),
+    postCss(postCssTasks),
+    gulp.dest('./optimized/'),
+    connect.reload(),
+  ], callback);
 });
 
 /* HTML Min */
-gulp.task('htmlMinify', function() {
-  gulp.src('./source/**/*.html')
-    .pipe(htmlMin({
-      removeComments               : true,
-      removeCommentsFromCDATA      : true,
-      removeCDATASectionsFromCDATA : true,
-      collapseWhitespace           : true,
-      preserveLineBreaks           : true,
-      collapseBooleanAttributes    : true,
-      removeTagWhitespace          : true,
-      removeAttributeQuotes        : true,
-      removeRedundantAttributes    : true,
-      preventAttributesEscaping    : true,
-      useShortDoctype              : true,
-      removeEmptyAttributes        : true,
-    }))
-    .pipe(gulp.dest('./optimized/'))
-    .pipe(connect.reload());
+gulp.task('htmlMinify', function(callback) {
+  var htmlMinOptions = {
+    removeComments               : true,
+    removeCommentsFromCDATA      : true,
+    removeCDATASectionsFromCDATA : true,
+    collapseWhitespace           : true,
+    preserveLineBreaks           : true,
+    collapseBooleanAttributes    : true,
+    removeTagWhitespace          : true,
+    removeAttributeQuotes        : true,
+    removeRedundantAttributes    : true,
+    preventAttributesEscaping    : true,
+    useShortDoctype              : true,
+    removeEmptyAttributes        : true,
+  };
+
+  pump([
+    gulp.src('./source/**/*.html'),
+    htmlMin(htmlMinOptions),
+    gulp.dest('./optimized/'),
+    connect.reload(),
+  ], callback);
 });
 
 /* ImageMin : 画像圧縮 */
-gulp.task('imageMinify', function() {
-  gulp.src('./source/**/*.{gif,jpg,png,svg}')
-    .pipe(imageMin({
+gulp.task('imageMinify', function(callback) {
+  pump([
+    gulp.src('./source/**/*.{gif,jpg,png,svg}'),
+    imageMin({
       progressive : true,
       interlaced  : true,
-    }))
-    .pipe(gulp.dest('./optimized/'));
+    }),
+    gulp.dest('./optimized/'),
+  ], callback);
 });
